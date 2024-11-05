@@ -1,57 +1,60 @@
 #include "main.h"
+#include "Pneumatic.hpp"
 using namespace pros;
+
+#define logToConsole(header, msg) printf("%s %lu: %s\n", std::string(header).c_str(), millis(), std::string(msg).c_str());
+#define logToConsole(header) printf("%s %lu \n", std::string(header).c_str(), millis());
+
+#define ARM_UP_ANGLE 500
 
 Controller controls(E_CONTROLLER_MASTER);
 
-Motor frontLeft(18, E_MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor midLeft(19, E_MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor backLeft(20, E_MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-MotorGroup leftMotors({frontLeft, midLeft, backLeft});
-
-Motor frontRight(8, E_MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor midRight(9, E_MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor backRight(10, E_MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-MotorGroup rightMotors({frontRight, midRight, backRight});
+MotorGroup leftDriveMotors({18, 19, 20}, E_MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+MotorGroup rightDriveMotors({8, 9, 10}, E_MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 
 Motor bottomIntake(16, E_MOTOR_GEAR_GREEN, true, E_MOTOR_ENCODER_DEGREES);
 Motor topIntake(11, E_MOTOR_GEAR_GREEN, true, E_MOTOR_ENCODER_DEGREES);
 Motor arm(1, E_MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 
-ADIDigitalOut sweeper('A');
-ADIDigitalOut hang('B');
-ADIDigitalOut mogoMech('C');
-ADIDigitalOut armPiston('D');
+Pneumatic sweeperPiston('A');
+Pneumatic hangPiston('B');
+Pneumatic mogoPiston('C');
+Pneumatic armPiston('D');
 
 Imu gyro(20);
 
 void initialize() {
     lcd::initialize();
     lcd::set_text(1, "Initialize");
+    logToConsole("Initialize");
     arm.tare_position();
 }
 
 void disabled() {
     lcd::set_text(1, "Disabled");
+    logToConsole("Disabled");
 }
 
 void autonomous() {
     lcd::set_text(1, "Autonomous");
+    logToConsole("Autonomous");
 }
 
 void opcontrol() {
     lcd::initialize();
     // lcd::set_text(1, "Opcontrol");
     controls.set_text(0, 0, "Opcontrol");
+    logToConsole("Opcontrol");
     arm.set_brake_mode(MOTOR_BRAKE_HOLD);
 
     arm.tare_position();
     // gyro.reset();
 
-    bool mogoActive = false, hangActive = false, armActive = false, sweeperActive = false, armPistonActive = false;
+    bool armActive = false;
     while (true) {
         // drive control
-        leftMotors.move(controls.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + controls.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
-        rightMotors.move(controls.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - controls.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+        leftDriveMotors.move(controls.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + controls.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+        rightDriveMotors.move(controls.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - controls.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
 
         if (controls.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
             // intake
@@ -76,7 +79,7 @@ void opcontrol() {
             if (armActive) {
                 arm.move_absolute(0, 127);
             } else if (!armActive) {
-                arm.move_absolute(500, -127);
+                arm.move_absolute(ARM_UP_ANGLE, -127);
             }
             armActive = !armActive;
         }
@@ -90,28 +93,23 @@ void opcontrol() {
         }
 
         if (controls.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-            armPistonActive = !armPistonActive;
-            armPiston.set_value(armPistonActive);
+            armPiston.switchPiston();
         }
 
         // mogo control
         if (controls.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-            mogoActive = !mogoActive;
-            mogoMech.set_value(mogoActive);
+            mogoPiston.switchPiston();
         }
 
         // hang control
         if (controls.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
-            hangActive = !hangActive;
-            hang.set_value(hangActive);
+            hangPiston.switchPiston();
         }
 
         // sweeper or doinker
         if (controls.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-            sweeperActive = !sweeperActive;
-            sweeper.set_value(sweeperActive);
+            sweeperPiston.switchPiston();
         }
-
         delay(20);
     }
 }

@@ -861,6 +861,7 @@ class Motor_Group {
 public:
     explicit Motor_Group(const std::initializer_list<Motor> motors);
     explicit Motor_Group(const std::vector<std::int8_t> motor_ports);
+    explicit Motor_Group(const std::vector<std::int8_t> motor_ports, const motor_gearset_e_t gearset = E_MOTOR_GEAR_GREEN, const bool reversed = false, const motor_encoder_units_e_t units = E_MOTOR_ENCODER_DEGREES);
     /****************************************************************************/
     /**                      Motor Group movement functions                    **/
     /**                                                                        **/
