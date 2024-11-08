@@ -102,30 +102,30 @@ void opcontrol() {
         } else {
             arm.move_absolute(0, -127);
         }
-    }
 
-    if (controls.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-        lcd::set_text(2, "Arm Piston Activated");
-        armPistonActive = !armPistonActive;
-        armPiston.set_value(armPistonActive);
-    }
+        if (controls.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+            lcd::set_text(2, "Arm Piston Activated");
+            armPistonActive = !armPistonActive;
+            armPiston.set_value(armPistonActive);
+        }
 
-    // mogo control
-    if (controls.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-        mogoActive = !mogoActive;
-        mogoMech.set_value(mogoActive);
-    }
+        // mogo control
+        if (controls.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+            mogoActive = !mogoActive;
+            mogoMech.set_value(mogoActive);
+        }
 
-    // hang control
-    if (controls.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
-        hangActive = !hangActive;
-        hang.set_value(hangActive);
-    }
+        // hang control
+        if (controls.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
+            hangActive = !hangActive;
+            hang.set_value(hangActive);
+        }
 
-    // sweeper or doinker
-    if (controls.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-        sweeperActive = !sweeperActive;
-        sweeper.set_value(sweeperActive);
+        // sweeper or doinker
+        if (controls.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+            sweeperActive = !sweeperActive;
+            sweeper.set_value(sweeperActive);
+        }
+        delay(20);
     }
-    delay(20);
 }
