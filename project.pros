@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "Bot code",
+    "project_name": "test code ",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -310,8 +310,8 @@
     },
     "upload_options": {
       "icon": "pros",
-      "description": "v1 of only driving ",
-      "slot": 1,
+      "description": "might not work",
+      "slot": 3,
       "after": "screen"
     }
   }

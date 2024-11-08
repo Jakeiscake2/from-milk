@@ -861,7 +861,7 @@ class Motor_Group {
 public:
     explicit Motor_Group(const std::initializer_list<Motor> motors);
     explicit Motor_Group(const std::vector<std::int8_t> motor_ports);
-    explicit Motor_Group(const std::vector<std::int8_t> motor_ports, const motor_gearset_e_t gearset = E_MOTOR_GEAR_GREEN, const bool reversed = false, const motor_encoder_units_e_t units = E_MOTOR_ENCODER_DEGREES);
+    // explicit Motor_Group(const std::vector<std::int8_t> motor_ports, const motor_gearset_e_t gearset = E_MOTOR_GEAR_GREEN, const bool reversed = false, const pros::motor_encoder_units_e_t units = E_MOTOR_ENCODER_DEGREES);
     /****************************************************************************/
     /**                      Motor Group movement functions                    **/
     /**                                                                        **/
@@ -885,7 +885,8 @@ public:
      * \return 1 if the operation was successful or PROS_ERR if the operation
      * failed, setting errno.
      */
-    std::int32_t operator=(std::int32_t);
+    std::int32_t
+    operator=(std::int32_t);
 
     /**
      * Sets the voltage for the motors in the motor group from -127 to 127.
