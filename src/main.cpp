@@ -44,14 +44,13 @@ void autonomous() {
     placeImage();
     lcd::set_text(line++, "Auton");
     (*autonArray[selectedAuton])();
-    //blueMogoRush();
+    // blueMogoRush();
 }
 
 void opcontrol() {
     runIntakeTask = false;
     controls.set_text(0, 0, "mogo NOT active");
     // Task debuggingTask(debugFunc);
-
     bool disableArm = false;
     while (true) {
         leftDriveMotors.move(controls.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + controls.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));

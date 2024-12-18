@@ -398,7 +398,11 @@
     },
     "upload_options": {
       "after": "screen",
+<<<<<<< HEAD
       "description": "For quals",
+=======
+      "description": "Last update, color sort",
+>>>>>>> f6ea80e51194571a4ef941b56d73e1a6282b6007
       "icon": "pros",
       "slot": 1
     },

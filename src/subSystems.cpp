@@ -1,10 +1,3 @@
-/* Subsystem managment
-* Designed for the managment of subsystems like the intake or the arm.
-* For use by user control and autonomus routines
-* Last Updated on 17/12/2024
-*
-*/
-
 #include "subsystems.hpp"
 #include "api.h"
 #include "global.hpp"
